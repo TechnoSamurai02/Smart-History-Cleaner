@@ -1,51 +1,79 @@
-const urlInput = document.getElementById("urlInput");
-const addBtn = document.getElementById("addBtn");
-const siteList = document.getElementById("siteList");
-const clearBtn = document.getElementById("clearHistoryBtn");
+const siteInput = document.getElementById('siteInput');
+const addBtn = document.getElementById('addSite');
+const siteList = document.getElementById('siteList');
+const clearBtn = document.getElementById('clearMatching'); // updated ID
+const autoToggle = document.getElementById('autoModeToggle');
 
 let sites = [];
 
-// Load saved sites
-chrome.storage.sync.get(["sites"], (result) => {
-  if (result.sites) {
-    sites = result.sites;
-    updateList();
-  }
+// Load saved data
+chrome.storage.sync.get(['sites', 'autoEnabled'], (res) => {
+  sites = res.sites || [];
+  autoToggle.checked = !!res.autoEnabled;
+  renderList();
 });
 
-addBtn.addEventListener("click", () => {
-  const site = urlInput.value.trim();
-  if (site && !sites.includes(site)) {
+// Add site
+addBtn.addEventListener('click', () => {
+  const site = siteInput.value.trim();
+  if (!site) return;
+
+  if (!sites.includes(site)) {
     sites.push(site);
     chrome.storage.sync.set({ sites });
-    updateList();
-    urlInput.value = "";
+    renderList();
   }
+
+  siteInput.value = '';
 });
 
-// Function to delete a site
-function deleteSite(site) {
-  sites = sites.filter((s) => s !== site);
-  chrome.storage.sync.set({ sites });
-  updateList();
-}
-
-// Function to update list display
-function updateList() {
-  siteList.innerHTML = "";
+// Render site list
+function renderList() {
+  siteList.innerHTML = '';
   sites.forEach((site) => {
-    const li = document.createElement("li");
-    li.textContent = site;
+    const li = document.createElement('li');
+    const text = document.createElement('span');
+    text.textContent = site;
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.onclick = () => deleteSite(site);
+    const del = document.createElement('button');
+    del.textContent = 'Delete';
+    del.onclick = () => {
+      sites = sites.filter((s) => s !== site);
+      chrome.storage.sync.set({ sites });
+      renderList();
+    };
 
-    li.appendChild(deleteBtn);
+    li.appendChild(text);
+    li.appendChild(del);
     siteList.appendChild(li);
   });
 }
 
-clearBtn.addEventListener("click", () => {
-  chrome.runtime.sendMessage({ action: "clearHistory", sites });
+clearBtn.addEventListener('click', () => {
+  if (sites.length === 0) {
+    alert("No sites in your list to clear.");
+    return;
+  }
+
+  let clearedCount = 0;
+
+  chrome.history.search({ text: '', maxResults: 5000 }, (historyItems) => {
+    historyItems.forEach((item) => {
+      for (const site of sites) {
+        if (item.url && item.url.includes(site)) {
+          chrome.history.deleteUrl({ url: item.url });
+          clearedCount++;
+          break;
+        }
+      }
+    });
+
+    alert(`✅ Cleared ${clearedCount} matching entries.`);
+  });
+});
+
+// Toggle auto mode
+autoToggle.addEventListener('change', () => {
+  const enabled = autoToggle.checked;
+  chrome.storage.sync.set({ autoEnabled: enabled });
 });
