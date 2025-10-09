@@ -3,20 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart History Cleaner</title>
+  <title>Auto History Cleaner</title>
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <h2>Smart History Cleaner</h2>
+  <div class="container">
+    <h1>Auto History Cleaner</h1>
+    
+    <div class="toggle-container">
+      <span>Auto Mode</span>
+      <label class="switch">
+        <input type="checkbox" id="autoModeToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
 
-  <div class="input-area">
-    <input type="text" id="urlInput" placeholder="Enter site (e.g. youtube.com)" />
-    <button id="addBtn">Add</button>
+    <div class="add-site">
+      <input type="text" id="siteInput" placeholder="Enter site (e.g. youtube.com)" />
+      <button id="addSite">Add</button>
+    </div>
+
+    <ul id="siteList"></ul>
+
+    <button id="clearMatching" class="danger">Clear Matching History</button>
   </div>
-
-  <ul id="siteList"></ul>
-
-  <button id="clearHistoryBtn">Clear Matching History</button>
 
   <script src="popup.js"></script>
 </body>
