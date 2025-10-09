@@ -1,63 +1,125 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f7f9fc;
-  color: #333;
+  font-family: 'Inter', sans-serif;
+  background-color: #0f172a;
+  color: #f8fafc;
   width: 320px;
-  padding: 12px;
+  margin: 0;
+  padding: 15px;
 }
 
-h2 {
-  text-align: center;
-  color: #2b7bff;
-}
-
-.input-area {
+.container {
   display: flex;
-  gap: 5px;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 10px;
 }
 
-#urlInput {
-  flex: 1;
-  padding: 6px;
-}
-
-button {
-  background: #2b7bff;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
-
-button:hover {
-  background: #1a5ed8;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
+h1 {
+  font-size: 1.2em;
+  text-align: center;
+  color: #38bdf8;
   margin-bottom: 10px;
 }
 
+/* Toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #475569;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #38bdf8;
+}
+
+input:checked + .slider:before {
+  transform: translateX(21px);
+}
+
+/* Add site input */
+.add-site {
+  display: flex;
+  gap: 5px;
+}
+
+#siteInput {
+  flex: 1;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+button {
+  background-color: #38bdf8;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background-color: #0284c7;
+}
+
+.danger {
+  background-color: #ef4444;
+}
+
+.danger:hover {
+  background-color: #b91c1c;
+}
+
+/* Site list */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
 li {
+  background-color: #1e293b;
+  padding: 6px;
+  border-radius: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #e3e8f0;
-  margin-bottom: 6px;
-  padding: 6px 8px;
-  border-radius: 5px;
+  margin-bottom: 5px;
 }
 
 li button {
-  background: #ff4d4d;
-  padding: 4px 8px;
-  font-size: 12px;
-}
-
-li button:hover {
-  background: #e63b3b;
+  background-color: #f87171;
+  padding: 3px 8px;
 }
